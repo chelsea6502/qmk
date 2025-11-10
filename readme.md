@@ -13,18 +13,18 @@ This is a preserved fork of QMK firmware (circa 2022) that maintains support for
 
 ### Prerequisites
 
-- Docker (any version that supports the `qmkfm/qmk_firmware` image)
+- Docker (any version that supports building custom images)
 - This repository cloned locally
 - Basic command line knowledge
 
 ### Build Command
 
 ```bash
-./util/docker_build.sh thock/conundrum:default
+./build-conundrum.sh
 ```
 
 **What this does:**
-1. Pulls the QMK Docker image (contains all build tools)
+1. Builds a custom Docker image with all build tools
 2. Compiles the firmware inside the container
 3. Outputs `thock_conundrum_default.bin` (~46KB)
 
@@ -33,7 +33,7 @@ This is a preserved fork of QMK firmware (circa 2022) that maintains support for
 If you've created a custom keymap in `keyboards/thock/conundrum/keymaps/your_name/`:
 
 ```bash
-./util/docker_build.sh thock/conundrum:your_name
+keymap=your_name:uf2 ./build-conundrum.sh
 ```
 
 ## Flashing the Firmware
@@ -66,10 +66,10 @@ The keyboard uses a **UF2 bootloader** and will appear as a USB drive when in bo
 
 ### Build Issues
 
-**"Docker image not found"**
-- The `qmkfm/qmk_firmware` image may no longer be available
-- You may need to build from the Dockerfile in this repository
-- Or use a locally cached version if you have one
+**"Docker image build fails"**
+- Ensure Docker Desktop is running
+- Check that you have sufficient disk space
+- Try: `docker system prune` to clean up old images
 
 **"Submodule errors"**
 - Run: `make git-submodule`
@@ -109,7 +109,7 @@ The Conundrum keyboard uses capacitive touch sensing and an ARM ATSAM microcontr
 If you're reading this years from now:
 
 1. **Keep this repository** - It may be the only working firmware source
-2. **Archive the Docker image** - `docker save qmkfm/qmk_firmware > qmk-image.tar`
+2. **Archive the Docker image** - `docker save thock/conundrum > conundrum-image.tar`
 3. **Save your compiled `.bin` files** - They may be the last working firmware
 4. **Document your keymap** - The source code is your only reference
 
