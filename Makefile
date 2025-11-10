@@ -534,19 +534,10 @@ endef
 %:
 	# Check if we have the CMP tool installed
 	cmp $(ROOT_DIR)/Makefile $(ROOT_DIR)/Makefile >/dev/null 2>&1; if [ $$? -gt 0 ]; then printf "$(MSG_NO_CMP)"; exit 1; fi;
-	# Check if the submodules are dirty, and display a warning if they are
-ifndef SKIP_GIT
-	if [ ! -e lib/chibios ]; then git submodule sync lib/chibios && git submodule update --depth 1 --init lib/chibios; fi
-	if [ ! -e lib/chibios-contrib ]; then git submodule sync lib/chibios-contrib && git submodule update --depth 1 --init lib/chibios-contrib; fi
-	if [ ! -e lib/ugfx ]; then git submodule sync lib/ugfx && git submodule update --depth 1 --init lib/ugfx; fi
-	git submodule status --recursive 2>/dev/null | \
-	while IFS= read -r x; do \
-		case "$$x" in \
-			\ *) ;; \
-			*) printf "$(MSG_SUBMODULE_DIRTY)";break;; \
-		esac \
-	done
-endif
+	# Check if required libraries exist locally
+	@if [ ! -d lib/chibios ]; then echo "Error: lib/chibios not found. Please ensure all libraries are present."; exit 1; fi
+	@if [ ! -d lib/chibios-contrib ]; then echo "Error: lib/chibios-contrib not found. Please ensure all libraries are present."; exit 1; fi
+	@if [ ! -d lib/ugfx ]; then echo "Error: lib/ugfx not found. Please ensure all libraries are present."; exit 1; fi
 	rm -f $(ERROR_FILE) > /dev/null 2>&1
 	$(eval $(call PARSE_RULE,$@))
 	$(eval $(call SET_SILENT_MODE))
@@ -579,25 +570,10 @@ endif
 # .PHONY: test-clean
 # test-clean: test-all-clean
 
-lib/%:
-	git submodule sync $?
-	git submodule update --init $?
+# Removed git submodule targets - using local libraries only
 
-.PHONY: git-submodule
-git-submodule:
-	git submodule sync --recursive
-	git submodule update --init --recursive --progress
-
-ifdef SKIP_VERSION
-SKIP_GIT := yes
-endif
-
-# Generate the version.h file
-ifndef SKIP_GIT
-    GIT_VERSION := $(shell git describe --abbrev=6 --dirty --always --tags 2>/dev/null || date +"%Y-%m-%d-%H:%M:%S")
-else
-    GIT_VERSION := NA
-endif
+# Generate the version.h file - using fixed version
+GIT_VERSION := v221015-local
 ifndef SKIP_VERSION
 BUILD_DATE := $(shell date +"%Y-%m-%d-%H:%M:%S")
 $(shell echo '#define QMK_VERSION "$(GIT_VERSION)"' > $(ROOT_DIR)/quantum/version.h)
