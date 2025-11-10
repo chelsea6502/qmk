@@ -70,3 +70,7 @@ util/Win_Check_Output.txt
 secrets.tar
 id_rsa_*
 /.vs
+
+# Docker image archives (too large for git, store in backups)
+conundrum-base-image.tar.gz
+conundrum-image.tar.gz

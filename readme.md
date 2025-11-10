@@ -106,11 +106,51 @@ The Conundrum keyboard uses capacitive touch sensing and an ARM ATSAM microcontr
 
 ### Future-Proofing
 
-If you're reading this years from now:
+This repository uses pre-built Docker image archives for maximum long-term viability.
 
+**Docker Image Archives (available in GitHub Releases):**
+- `conundrum-base-image.tar.gz` (387 MB) - Base image with all build tools
+- `conundrum-image.tar.gz` (985 MB) - Complete build environment
+
+**Why these exist:** Even if Debian 11 repositories disappear or Docker Hub removes old images, you can still build firmware using these archives.
+
+**Download archives from releases:**
+```bash
+# Download from GitHub Releases page
+# Or use wget/curl:
+wget https://github.com/chelsea6502/qmk-conundrum/releases/latest/download/conundrum-base-image.tar.gz
+wget https://github.com/chelsea6502/qmk-conundrum/releases/latest/download/conundrum-image.tar.gz
+```
+
+**On a fresh system:**
+```bash
+# Download the base image archive first, then:
+./build-conundrum.sh  # Automatically loads base image if needed
+
+# Or manually load images:
+docker load < conundrum-base-image.tar.gz
+docker load < conundrum-image.tar.gz
+```
+
+**Creating/updating the archives:**
+```bash
+# Base image (only needed once or when tools update)
+docker build -f Dockerfile.base -t thock/conundrum-base .
+docker save thock/conundrum-base | gzip > conundrum-base-image.tar.gz
+
+# Complete image (after building)
+./build-conundrum.sh
+docker save thock/conundrum | gzip > conundrum-image.tar.gz
+
+# Upload both to GitHub Releases
+```
+
+**Backup strategy:** The archives are stored in GitHub Releases. Also back up to cloud storage + external drive following the 3-2-1 backup rule.
+
+**If you're reading this years from now:**
 1. **Keep this repository** - It may be the only working firmware source
-2. **Archive the Docker image** - `docker save thock/conundrum > conundrum-image.tar`
-3. **Save your compiled `.bin` files** - They may be the last working firmware
+2. **Download archives from Releases** - They're permanently stored there
+3. **Save your compiled `.bin` files** - They work without any build tools
 4. **Document your keymap** - The source code is your only reference
 
 ### Known Issues
