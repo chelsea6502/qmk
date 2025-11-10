@@ -1,0 +1,3 @@
+UF2 Bootloader v3.9.0-7-g2b5c0f5 SFHO
+Model: Conundrum
+Board-ID: thock.co-conundrum-v1
