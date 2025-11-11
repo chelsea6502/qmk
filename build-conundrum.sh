@@ -11,6 +11,7 @@ if ! docker image inspect thock/conundrum-base >/dev/null 2>&1; then
         wget -q https://github.com/chelsea6502/qmk-conundrum/releases/latest/download/conundrum-base-image.tar.gz
         docker load < conundrum-base-image.tar.gz
     fi
+    ## TODO: Self-contained toolchain version as backup
 fi
 
 # Build the project image
