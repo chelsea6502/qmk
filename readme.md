@@ -2,7 +2,7 @@
 
 Preserved QMK fork for the Thock Conundrum keyboard (ARM ATSAM SAMD51G18A). 
 
-Designed for long-term preservation. Fully self-contained with no online dependencies apart from Docker and GitHub.
+Designed for long-term preservation. Fully self-contained with no online dependencies apart from Docker.
 
 ## Building
 

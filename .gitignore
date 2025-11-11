@@ -71,6 +71,8 @@ secrets.tar
 id_rsa_*
 /.vs
 
-# Docker image archives (too large for git, store in backups)
+
+# Docker image archives - tracked with Git LFS locally only
+# (GitHub forks cannot upload LFS objects)
 conundrum-base-image.tar.gz
 conundrum-image.tar.gz
